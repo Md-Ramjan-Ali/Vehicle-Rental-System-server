@@ -1,7 +1,7 @@
 import { Pool } from "pg";
 import configFile from "./env";
 
-const pool = new Pool({
+export const pool = new Pool({
   connectionString: configFile.connection_string,
 })
 
