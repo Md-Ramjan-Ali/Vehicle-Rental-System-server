@@ -49,7 +49,26 @@ const getAllBookings = async (role: string, userId: number) => {
   return result.rows;
 };
 
+const updateBookingStatus = async (id: string, status: string) => {
+  // Update the booking status
+  const query = "UPDATE bookings SET status = $1 WHERE id = $2 RETURNING *";
+  const result = await pool.query(query, [status, id]);
+  const booking = result.rows[0];
+
+  if (!booking) return null;
+
+  if (status === "returned" || status === "cancelled") {
+    await pool.query(
+      "UPDATE vehicles SET availability_status = 'available' WHERE id = $1",
+      [booking.vehicle_id],
+    );
+  }
+
+  return booking;
+};
+
 export const bookingService = {
   createBooking,
   getAllBookings,
+  updateBookingStatus,
 };
