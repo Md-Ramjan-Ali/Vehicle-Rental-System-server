@@ -3,6 +3,9 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import globalErrorHandler from "./middlewares/error.middleware";
 import { authRoutes } from "./modules/auth/auth.routes";
+import { vehicleRoutes } from "./modules/vehicles/vehicles.routes";
+import { userRoutes } from "./modules/users/users.routes";
+import { bookingRoutes } from "./modules/bookings/bookings.routes";
 
 dotenv.config();
 
@@ -26,6 +29,9 @@ app.get("/", async (req: Request, res: Response) => {
 
 // App Routes
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/vehicles", vehicleRoutes);
+app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/bookings", bookingRoutes);
 
 //not found route
 app.use((req: Request, res: Response) => {

@@ -1,0 +1,63 @@
+import { pool } from "../../config/db";
+import { Vehicle } from "./vehicle.interface";
+
+const createVehicle = async (vehicleData: Vehicle) => {
+  const query = `
+    INSERT INTO vehicles (vehicle_name, type, registration_number, daily_rent_price, availability_status)
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING *;
+  `;
+  const values = [
+    vehicleData.vehicle_name,
+    vehicleData.type,
+    vehicleData.registration_number,
+    vehicleData.daily_rent_price,
+    vehicleData.availability_status || "available",
+  ];
+  const result = await pool.query(query, values);
+  return result.rows[0];
+};
+
+const getAllVehicles = async () => {
+  const query = "SELECT * FROM vehicles";
+  const result = await pool.query(query);
+  return result.rows;
+};
+
+const getVehicleById = async (id: string) => {
+  const query = "SELECT * FROM vehicles WHERE id = $1";
+  const result = await pool.query(query, [id]);
+  return result.rows[0];
+};
+
+const updateVehicle = async (id: string, updateData: Vehicle) => {
+  const query = `
+    UPDATE vehicles SET vehicle_name = $1, type = $2, registration_number = $3, daily_rent_price = $4, availability_status = $5 WHERE id = $6 RETURNING *;
+  `;
+
+  const values = [
+    updateData.vehicle_name,
+    updateData.type,
+    updateData.registration_number,
+    updateData.daily_rent_price,
+    updateData.availability_status,
+    id,
+  ];
+
+  const result = await pool.query(query, values);
+  return result.rows[0];
+};
+
+const deleteVehicle = async (id: string) => {
+  const query = "DELETE FROM vehicles WHERE id = $1 RETURNING *";
+  const result = await pool.query(query, [id]);
+  return result.rows[0];
+};
+
+export const vehicleService = {
+  createVehicle,
+  getAllVehicles,
+  getVehicleById,
+  updateVehicle,
+  deleteVehicle,
+};
