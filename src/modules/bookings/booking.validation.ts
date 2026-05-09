@@ -4,12 +4,8 @@ const createBookingSchema = z.object({
   body: z
     .object({
       vehicle_id: z.number().int().positive("Invalid vehicle ID"),
-      rent_start_date: z
-        .string()
-        .datetime({ message: "Invalid start date format (ISO required)" }),
-      rent_end_date: z
-        .string()
-        .datetime({ message: "Invalid end date format (ISO required)" }),
+      rent_start_date: z.string().min(1, "Start date is required"),
+      rent_end_date: z.string().min(1, "End date is required"),
     })
     .refine(
       (data) => {
