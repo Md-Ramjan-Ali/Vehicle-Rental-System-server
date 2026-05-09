@@ -50,13 +50,32 @@ const getAllBookings = async (role: string, userId: number) => {
 };
 
 const updateBookingStatus = async (id: string, status: string) => {
-  // Update the booking status
-  const query = "UPDATE bookings SET status = $1 WHERE id = $2 RETURNING *";
-  const result = await pool.query(query, [status, id]);
-  const booking = result.rows[0];
+  // 1. the booking to check
+  const bookingCheck = await pool.query("SELECT * FROM bookings WHERE id = $1", [
+    id,
+  ]);
+  const booking = bookingCheck.rows[0];
 
   if (!booking) return null;
 
+  // 2. Only cancel if it hasn't started yet
+  if (status === "cancelled") {
+    const startDate = new Date(booking.rent_start_date);
+    const now = new Date();
+
+    if (now >= startDate) {
+      throw new Error(
+        "Cannot cancel a booking after the start date has passed",
+      );
+    }
+  }
+
+  // 3. Update the booking status
+  const query = "UPDATE bookings SET status = $1 WHERE id = $2 RETURNING *";
+  const result = await pool.query(query, [status, id]);
+  const updatedBooking = result.rows[0];
+
+  // 4. Reset vehicle availability
   if (status === "returned" || status === "cancelled") {
     await pool.query(
       "UPDATE vehicles SET availability_status = 'available' WHERE id = $1",
@@ -64,7 +83,7 @@ const updateBookingStatus = async (id: string, status: string) => {
     );
   }
 
-  return booking;
+  return updatedBooking;
 };
 
 export const bookingService = {
