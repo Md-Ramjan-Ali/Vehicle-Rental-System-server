@@ -1,5 +1,11 @@
-# Vehicle Rental System API 🚗💨
+# Vehicle Rental System API
 
+**Live Deployment:** [https://vehicle-rental-system-server-five.vercel.app]  
+**GitHub Repository:** [https://github.com/Md-Ramjan-Ali/Vehicle-Rental-System-server]
+
+---
+
+## 🎯 Project Overview
 A robust and secure backend API for managing a vehicle rental business. Built with **Node.js, TypeScript, and PostgreSQL**, this system handles vehicle inventory, user management, and booking workflows with role-based access control.
 
 ## 🚀 Features
@@ -15,7 +21,7 @@ A robust and secure backend API for managing a vehicle rental business. Built wi
   - Deletion constraints (cannot delete users/vehicles with active bookings).
   - Cancellation constraints (cannot cancel after the start date).
 
-## 🛠️ Tech Stack
+## 🛠️ Technology Stack
 - **Runtime**: Node.js
 - **Language**: TypeScript
 - **Framework**: Express.js
@@ -23,11 +29,11 @@ A robust and secure backend API for managing a vehicle rental business. Built wi
 - **Security**: JSON Web Tokens (JWT), Bcrypt
 - **Validation**: Zod
 
-## ⚙️ Setup Instructions
+## ⚙️ Setup & Usage Instructions
 
 ### 1. Prerequisites
 - Node.js installed.
-- PostgreSQL database running.
+- PostgreSQL database (Local or Cloud like Supabase/Neon).
 
 ### 2. Installation
 ```bash
@@ -38,8 +44,8 @@ npm install
 Create a `.env` file in the root directory and add the following:
 ```env
 PORT=5000
-DATABASE_URL=postgresql://username:password@localhost:5432/vehicle_rental_db
-JWT_SECRET=your_super_secret_key
+DATABASE_URL=your_postgresql_url
+JWT_SECRET=your_secret_key
 ```
 
 ### 4. Running the Project
@@ -47,33 +53,10 @@ JWT_SECRET=your_super_secret_key
 # Development mode
 npm run dev
 
-# Production build
+# Build and Start
 npm run build
 npm start
 ```
-
-## 📖 API Reference
-
-### Authentication
-- `POST /api/v1/auth/signup` - Register a new user
-- `POST /api/v1/auth/signin` - Login and get JWT
-
-### Vehicles
-- `POST /api/v1/vehicles` - Add new vehicle (Admin)
-- `GET /api/v1/vehicles` - Get all vehicles
-- `GET /api/v1/vehicles/:id` - Get single vehicle
-- `PUT /api/v1/vehicles/:id` - Update vehicle (Admin)
-- `DELETE /api/v1/vehicles/:id` - Delete vehicle (Admin)
-
-### Users
-- `GET /api/v1/users` - Get all users (Admin)
-- `PUT /api/v1/users/:id` - Update profile (Admin/Own)
-- `DELETE /api/v1/users/:id` - Delete user (Admin)
-
-### Bookings
-- `POST /api/v1/bookings` - Create a booking
-- `GET /api/v1/bookings` - View bookings (Role-based)
-- `PUT /api/v1/bookings/:id` - Cancel or Return booking
 
 ---
 Developed with ❤️ by Md. Ramjan Ali
